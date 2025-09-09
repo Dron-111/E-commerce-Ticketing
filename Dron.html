@@ -1,0 +1,1449 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventMart - Premium Events & Merchandise</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            padding: 15px 50px;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            transform: translateY(-2px);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #ff6b6b;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .cart-btn {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .cart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.3);
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff3838;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hero-content {
+            z-index: 2;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ff6b6b, #feca57, #48cae4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        
+        .main-content {
+            background: white;
+            min-height: 100vh;
+            margin-top: -100px;
+            border-radius: 50px 50px 0 0;
+            padding: 100px 50px 50px;
+            position: relative;
+            z-index: 3;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section {
+            margin-bottom: 80px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 50px;
+            color: #333;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            border-radius: 2px;
+        }
+
+        
+        .tab-nav {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            background: #f8f9fa;
+            border-radius: 50px;
+            padding: 5px;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            position: relative;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .product-image.tshirt {
+            background-image: url('https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
+        }
+
+        .product-image.hoodie {
+            background-image: url('https://images.unsplash.com/photo-1556821840-3a63f95609a7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
+        }
+
+        .product-image.poster {
+            background-image: url('https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
+        }
+
+        .product-image.headphones {
+            background-image: url('https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
+        }
+
+        .product-image.wristband {
+            background-image: url('https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
+        }
+
+        .product-image.vinyl {
+            background-image: url('https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
+        }
+
+        .product-info {
+            padding: 25px;
+        }
+
+        .product-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .product-description {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ff6b6b;
+            margin-bottom: 15px;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            padding: 10px 20px;
+            font-size: 14px;
+            border-radius: 25px;
+            flex: 1;
+        }
+
+        
+        .event-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .event-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.1; }
+            50% { transform: scale(1.1); opacity: 0.2; }
+        }
+
+        .event-date {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .event-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .event-venue {
+            opacity: 0.8;
+            margin-bottom: 15px;
+        }
+
+        
+        .security-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .security-feature {
+            text-align: center;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .security-feature:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+
+        .security-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .modal-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translate(-50%, -60%); opacity: 0; }
+            to { transform: translate(-50%, -50%); opacity: 1; }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .cart-items {
+            margin: 20px 0;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-total {
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-align: right;
+            margin: 20px 0;
+            color: #ff6b6b;
+        }
+
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #ff6b6b;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        
+        .success-message {
+            background: linear-gradient(45deg, #48cae4, #0077b6);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        
+        .status-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            z-index: 1000;
+        }
+
+        .status-indicator.offline {
+            background: #dc3545;
+        }
+
+        
+        .order-form {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 20px 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #ff6b6b;
+            outline: none;
+            box-shadow: 0 0 10px rgba(255, 107, 107, 0.1);
+        }
+
+        
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 0 20px;
+            }
+
+            .nav-links {
+                gap: 15px;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .main-content {
+                padding: 50px 20px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+
+<script>
+	
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	
+</script>
+</head>
+<body>
+    
+    <div id="statusIndicator" class="status-indicator">
+        🟢 Backend Online
+    </div>
+
+    <nav id="navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">EventMart</a>
+            <ul class="nav-links">
+                <li><a href="#home" onclick="showSection('home')">Home</a></li>
+                <li><a href="#shop" onclick="showSection('shop')">Shop</a></li>
+                <li><a href="#events" onclick="showSection('events')">Events</a></li>
+                <li><a href="#security" onclick="showSection('security')">Security</a></li>
+            </ul>
+            <button class="cart-btn" onclick="openCart()">
+                Cart <span class="cart-count" id="cartCount">0</span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="hero" id="home">
+        <div class="hero-content">
+            <h1>Premium Events & Merchandise</h1>
+            <p>Experience the best concerts, festivals, and exclusive merchandise with secure booking</p>
+            <div class="cta-buttons">
+                <a href="#shop" class="btn btn-primary" onclick="showSection('shop')">Shop Now</a>
+                <a href="#events" class="btn btn-secondary" onclick="showSection('events')">Book Tickets</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="container">
+            
+            <div id="shopSection" class="section">
+                <h2 class="section-title">Merchandise Store</h2>
+                
+                <div class="tab-nav">
+                    <button class="tab-btn active" onclick="showTab('merchandise')">Merchandise</button>
+                    <button class="tab-btn" onclick="showTab('accessories')">Accessories</button>
+                    <button class="tab-btn" onclick="showTab('collectibles')">Collectibles</button>
+                </div>
+
+                <div id="merchandise" class="tab-content active">
+                    <div class="product-grid">
+                        <div class="product-card">
+                            <div class="product-image tshirt"></div>
+                            <div class="product-info">
+                                <div class="product-title">Limited Edition T-Shirt</div>
+                                <div class="product-description">Premium quality concert t-shirt with exclusive artwork</div>
+                                <div class="product-price">₹2,399</div>
+                                <div class="product-actions">
+                                    <button class="btn btn-primary btn-small" onclick="addToCart('Limited Edition T-Shirt', 2399, 'MERCH001')">Add to Cart</button>
+                                    <button class="btn btn-secondary btn-small">Quick View</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="product-card">
+                            <div class="product-image hoodie"></div>
+                            <div class="product-info">
+                                <div class="product-title">Festival Hoodie</div>
+                                <div class="product-description">Cozy hoodie perfect for outdoor events and festivals</div>
+                                <div class="product-price">₹3,999</div>
+                                <div class="product-actions">
+                                    <button class="btn btn-primary btn-small" onclick="addToCart('Festival Hoodie', 3999, 'MERCH002')">Add to Cart</button>
+                                    <button class="btn btn-secondary btn-small">Quick View</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="product-card">
+                            <div class="product-image poster"></div>
+                            <div class="product-info">
+                                <div class="product-title">Artist Poster Set</div>
+                                <div class="product-description">Collection of 3 high-quality prints from top artists</div>
+                                <div class="product-price">₹1,599</div>
+                                <div class="product-actions">
+                                    <button class="btn btn-primary btn-small" onclick="addToCart('Artist Poster Set', 1599, 'MERCH003')">Add to Cart</button>
+                                    <button class="btn btn-secondary btn-small">Quick View</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="accessories" class="tab-content">
+                    <div class="product-grid">
+                        <div class="product-card">
+                            <div class="product-image headphones"></div>
+                            <div class="product-info">
+                                <div class="product-title">Wireless Headphones</div>
+                                <div class="product-description">High-quality audio for the ultimate music experience</div>
+                                <div class="product-price">₹7,199</div>
+                                <div class="product-actions">
+                                    <button class="btn btn-primary btn-small" onclick="addToCart('Wireless Headphones', 7199, 'ACC001')">Add to Cart</button>
+                                    <button class="btn btn-secondary btn-small">Quick View</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="product-card">
+                            <div class="product-image wristband"></div>
+                            <div class="product-info">
+                                <div class="product-title">Festival Wristband</div>
+                                <div class="product-description">Stylish wristband with NFC technology</div>
+                                <div class="product-price">₹1,279</div>
+                                <div class="product-actions">
+                                    <button class="btn btn-primary btn-small" onclick="addToCart('Festival Wristband', 1279, 'ACC002')">Add to Cart</button>
+                                    <button class="btn btn-secondary btn-small">Quick View</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="collectibles" class="tab-content">
+                    <div class="product-grid">
+                        <div class="product-card">
+                            <div class="product-image vinyl"></div>
+                            <div class="product-info">
+                                <div class="product-title">Signed Vinyl Record</div>
+                                <div class="product-description">Limited edition vinyl signed by the artist</div>
+                                <div class="product-price">₹15,999</div>
+                                <div class="product-actions">
+                                    <button class="btn btn-primary btn-small" onclick="addToCart('Signed Vinyl Record', 15999, 'COL001')">Add to Cart</button>
+                                    <button class="btn btn-secondary btn-small">Quick View</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div id="eventsSection" class="section">
+                <h2 class="section-title">Upcoming Events</h2>
+                
+                <div class="product-grid">
+                    <div class="event-card">
+                        <div class="event-date">Dec 15, 2024</div>
+                        <div class="event-title">Summer Music Festival</div>
+                        <div class="event-venue">Pragati Maidan, New Delhi</div>
+                        <div class="product-price">₹6,000 - ₹12,000</div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="bookTicket('Summer Music Festival', 6000, 'EVENT001')">Book Ticket</button>
+                            <button class="btn btn-secondary btn-small">More Info</button>
+                        </div>
+                    </div>
+
+                    <div class="event-card">
+                        <div class="event-date">Dec 22, 2024</div>
+                        <div class="event-title">Jazz Night Live</div>
+                        <div class="event-venue">Blue Frog, Mumbai</div>
+                        <div class="product-price">₹3,600 - ₹6,800</div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="bookTicket('Jazz Night Live', 3600, 'EVENT002')">Book Ticket</button>
+                            <button class="btn btn-secondary btn-small">More Info</button>
+                        </div>
+                    </div>
+
+                    <div class="event-card">
+                        <div class="event-date">Jan 5, 2025</div>
+                        <div class="event-title">Electronic Dance Party</div>
+                        <div class="event-venue">Phoenix MarketCity, Bangalore</div>
+                        <div class="product-price">₹2,800 - ₹9,600</div>
+                        <div class="product-actions">
+                            <button class="btn btn-primary btn-small" onclick="bookTicket('Electronic Dance Party', 2800, 'EVENT003')">Book Ticket</button>
+                            <button class="btn btn-secondary btn-small">More Info</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="securitySection" class="section">
+                <h2 class="section-title">Security & Trust</h2>
+                
+                <div class="security-grid">
+                    <div class="security-feature">
+                        <div class="security-icon">🔒</div>
+                        <h3>SSL Encryption</h3>
+                        <p>All transactions are protected with 256-bit SSL encryption ensuring your data is secure.</p>
+                    </div>
+
+                    <div class="security-feature">
+                        <div class="security-icon">🛡️</div>
+                        <h3>Fraud Protection</h3>
+                        <p>Advanced fraud detection systems monitor all transactions for suspicious activity.</p>
+                    </div>
+
+                    <div class="security-feature">
+                        <div class="security-icon">🎫</div>
+                        <h3>Verified Tickets</h3>
+                        <p>All tickets are authenticated and verified to prevent counterfeiting.</p>
+                    </div>
+
+                    <div class="security-feature">
+                        <div class="security-icon">💳</div>
+                        <h3>Secure Payments</h3>
+                        <p>UPI, Card payments with RBI compliance for maximum security.</p>
+                    </div>
+
+                    <div class="security-feature">
+                        <div class="security-icon">📱</div>
+                        <h3>2FA Authentication</h3>
+                        <p>Two-factor authentication adds an extra layer of security to your account.</p>
+                    </div>
+
+                    <div class="security-feature">
+                        <div class="security-icon">🔄</div>
+                        <h3>Money-Back Guarantee</h3>
+                        <p>Full refund policy for cancelled events and satisfaction guarantee.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeCart()">&times;</button>
+            <h3>Shopping Cart</h3>
+            <div id="cartItems" class="cart-items">
+                <p>Your cart is empty</p>
+            </div>
+            <div id="cartTotal" class="cart-total">Total: ₹0</div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="showCheckout()">
+                Proceed to Checkout
+            </button>
+        </div>
+    </div>
+
+    
+    <div id="checkoutModal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <button class="close-modal" onclick="closeCheckout()">&times;</button>
+            <h3>Checkout</h3>
+            <div class="order-form">
+                <div class="form-group">
+                    <label for="customerName">Full Name*</label>
+                    <input type="text" id="customerName" required>
+                </div>
+                <div class="form-group">
+                    <label for="customerEmail">Email Address*</label>
+                    <input type="email" id="customerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="customerPhone">Phone Number*</label>
+                    <input type="tel" id="customerPhone" required>
+                </div>
+                <div class="form-group">
+                    <label for="customerAddress">Address</label>
+                    <textarea id="customerAddress" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="paymentMethod">Payment Method*</label>
+                    <select id="paymentMethod" required>
+                        <option value="">Select Payment Method</option>
+                        <option value="upi">UPI</option>
+                        <option value="card">Credit/Debit Card</option>
+                        <option value="netbanking">Net Banking</option>
+                        <option value="wallet">Digital Wallet</option>
+                    </select>
+                </div>
+            </div>
+            <div id="orderSummary" class="cart-items">
+                
+            </div>
+            <div id="finalTotal" class="cart-total">Total: ₹0</div>
+            <button class="btn btn-primary" style="width: 100%; margin-top: 20px;" onclick="processOrder()">
+                Place Order
+            </button>
+        </div>
+    </div>
+
+    <script>
+        
+        class BackendAPI {
+            constructor() {
+                this.products = new Map();
+                this.orders = new Map();
+                this.bookings = new Map();
+                this.orderCounter = 1000;
+                this.bookingCounter = 5000;
+                this.initializeProducts();
+            }
+
+            initializeProducts() {
+                
+                const products = [
+                    { id: 'MERCH001', name: 'Limited Edition T-Shirt', price: 2399, stock: 50, category: 'merchandise' },
+                    { id: 'MERCH002', name: 'Festival Hoodie', price: 3999, stock: 30, category: 'merchandise' },
+                    { id: 'MERCH003', name: 'Artist Poster Set', price: 1599, stock: 100, category: 'merchandise' },
+                    { id: 'ACC001', name: 'Wireless Headphones', price: 7199, stock: 25, category: 'accessories' },
+                    { id: 'ACC002', name: 'Festival Wristband', price: 1279, stock: 200, category: 'accessories' },
+                    { id: 'COL001', name: 'Signed Vinyl Record', price: 15999, stock: 10, category: 'collectibles' },
+                    { id: 'EVENT001', name: 'Summer Music Festival', price: 6000, stock: 1000, category: 'event' },
+                    { id: 'EVENT002', name: 'Jazz Night Live', price: 3600, stock: 200, category: 'event' },
+                    { id: 'EVENT003', name: 'Electronic Dance Party', price: 2800, stock: 500, category: 'event' }
+                ];
+
+                products.forEach(product => {
+                    this.products.set(product.id, product);
+                });
+            }
+
+            async addToCart(productId, quantity = 1) {
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        const product = this.products.get(productId);
+                        if (!product) {
+                            reject(new Error('Product not found'));
+                            return;
+                        }
+
+                        if (product.stock < quantity) {
+                            reject(new Error('Insufficient stock'));
+                            return;
+                        }
+
+                        resolve({
+                            success: true,
+                            product: product,
+                            message: 'Product added to cart successfully'
+                        });
+                    }, 800); 
+                });
+            }
+
+            async bookTicket(eventId, quantity = 1) {
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        const event = this.products.get(eventId);
+                        if (!event || event.category !== 'event') {
+                            reject(new Error('Event not found'));
+                            return;
+                        }
+
+                        if (event.stock < quantity) {
+                            reject(new Error('Tickets sold out'));
+                            return;
+                        }
+
+                        const bookingId = `BKG${this.bookingCounter++}`;
+                        const booking = {
+                            id: bookingId,
+                            eventId: eventId,
+                            eventName: event.name,
+                            quantity: quantity,
+                            price: event.price,
+                            total: event.price * quantity,
+                            status: 'confirmed',
+                            bookingDate: new Date()
+                        };
+
+                        this.bookings.set(bookingId, booking);
+                        event.stock -= quantity; 
+
+                        resolve({
+                            success: true,
+                            booking: booking,
+                            message: 'Ticket booked successfully'
+                        });
+                    }, 1200); 
+                });
+            }
+
+            async processOrder(orderData) {
+                return new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        const orderId = `ORD${this.orderCounter++}`;
+                        const order = {
+                            id: orderId,
+                            ...orderData,
+                            status: 'confirmed',
+                            orderDate: new Date(),
+                            estimatedDelivery: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) 
+                        };
+
+                        this.orders.set(orderId, order);
+
+                        
+                        orderData.items.forEach(item => {
+                            const product = this.products.get(item.id);
+                            if (product) {
+                                product.stock -= item.quantity;
+                            }
+                        });
+
+                        resolve({
+                            success: true,
+                            order: order,
+                            message: 'Order placed successfully'
+                        });
+                    }, 1500); 
+                });
+            }
+
+            getOrderStatus(orderId) {
+                return this.orders.get(orderId) || null;
+            }
+
+            getBookingStatus(bookingId) {
+                return this.bookings.get(bookingId) || null;
+            }
+        }
+
+        
+        const api = new BackendAPI();
+
+        
+        let cart = [];
+        let cartTotal = 0;
+
+        
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        
+        function showSection(section) {
+            const sections = ['shopSection', 'eventsSection', 'securitySection'];
+            sections.forEach(s => {
+                const element = document.getElementById(s);
+                if (element) element.style.display = 'none';
+            });
+            
+            if (section === 'home') {
+                document.querySelector('.hero').scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+            
+            const targetSection = document.getElementById(section + 'Section');
+            if (targetSection) {
+                targetSection.style.display = 'block';
+                targetSection.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        
+        function showTab(tabName) {
+            const tabs = document.querySelectorAll('.tab-content');
+            const buttons = document.querySelectorAll('.tab-btn');
+            
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            const targetTab = document.getElementById(tabName);
+            if (targetTab) {
+                targetTab.classList.add('active');
+            }
+            
+            if (event && event.target) {
+                event.target.classList.add('active');
+            }
+        }
+
+        
+        async function addToCart(name, price, productId) {
+            const button = event.target;
+            const originalText = button.innerHTML;
+            
+            
+            button.innerHTML = 'Adding...<span class="loading"></span>';
+            button.disabled = true;
+            
+            try {
+                const response = await api.addToCart(productId);
+                
+                if (response.success) {
+                    
+                    const existingItem = cart.find(item => item.id === productId);
+                    if (existingItem) {
+                        existingItem.quantity += 1;
+                    } else {
+                        cart.push({ 
+                            id: productId, 
+                            name, 
+                            price, 
+                            quantity: 1,
+                            type: 'product'
+                        });
+                    }
+                    
+                    cartTotal += price;
+                    updateCartDisplay();
+                    
+                    button.innerHTML = 'Added! ✓';
+                    button.style.background = '#28a745';
+                    
+                    
+                    showSuccessMessage('Product added to cart successfully!');
+                    
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.style.background = '';
+                        button.disabled = false;
+                    }, 2000);
+                }
+            } catch (error) {
+                button.innerHTML = 'Error!';
+                button.style.background = '#dc3545';
+                console.error('Add to cart failed:', error);
+                
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.style.background = '';
+                    button.disabled = false;
+                }, 2000);
+            }
+        }
+
+        
+        async function bookTicket(eventName, price, eventId) {
+            const button = event.target;
+            const originalText = button.innerHTML;
+            
+            button.innerHTML = 'Booking...<span class="loading"></span>';
+            button.disabled = true;
+            
+            try {
+                const response = await api.bookTicket(eventId);
+                
+                if (response.success) {
+                    
+                    cart.push({ 
+                        id: eventId, 
+                        name: eventName + ' Ticket', 
+                        price, 
+                        quantity: 1,
+                        type: 'ticket',
+                        bookingId: response.booking.id
+                    });
+                    
+                    cartTotal += price;
+                    updateCartDisplay();
+                    
+                    button.innerHTML = 'Booked! ✓';
+                    button.style.background = '#28a745';
+                    
+                    
+                    showSuccessMessage(`Ticket booked successfully! Booking ID: ${response.booking.id}`);
+                    
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.style.background = '';
+                        button.disabled = false;
+                    }, 3000);
+                }
+            } catch (error) {
+                button.innerHTML = 'Error!';
+                button.style.background = '#dc3545';
+                showSuccessMessage('Booking failed: ' + error.message, 'error');
+                
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.style.background = '';
+                    button.disabled = false;
+                }, 2000);
+            }
+        }
+
+        
+        function updateCartDisplay() {
+            document.getElementById('cartCount').textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+        }
+
+        
+        function openCart() {
+            const modal = document.getElementById('cartModal');
+            const cartItems = document.getElementById('cartItems');
+            const cartTotalEl = document.getElementById('cartTotal');
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p>Your cart is empty</p>';
+            } else {
+                cartItems.innerHTML = cart.map((item, index) => `
+                    <div class="cart-item">
+                        <div>
+                            <strong>${item.name}</strong>
+                            ${item.bookingId ? `<br><small>Booking ID: ${item.bookingId}</small>` : ''}
+                            <br><small>Qty: ${item.quantity}</small>
+                        </div>
+                        <div>
+                            <strong>₹${(item.price * item.quantity).toLocaleString()}</strong>
+                            <br><button onclick="removeFromCart(${index})" style="background: none; border: none; color: #dc3545; cursor: pointer;">Remove</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            cartTotalEl.textContent = `Total: ₹${cartTotal.toLocaleString()}`;
+            modal.style.display = 'block';
+        }
+
+        
+        function closeCart() {
+            document.getElementById('cartModal').style.display = 'none';
+        }
+
+        
+        function removeFromCart(index) {
+            const item = cart[index];
+            cartTotal -= (item.price * item.quantity);
+            cart.splice(index, 1);
+            updateCartDisplay();
+            openCart(); 
+        }
+
+        
+        function showCheckout() {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            
+            closeCart();
+            
+            const checkoutModal = document.getElementById('checkoutModal');
+            const orderSummary = document.getElementById('orderSummary');
+            const finalTotal = document.getElementById('finalTotal');
+            
+            
+            orderSummary.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <div>
+                        <strong>${item.name}</strong>
+                        ${item.bookingId ? `<br><small>Booking ID: ${item.bookingId}</small>` : ''}
+                        <br><small>Qty: ${item.quantity}</small>
+                    </div>
+                    <div><strong>₹${(item.price * item.quantity).toLocaleString()}</strong></div>
+                </div>
+            `).join('');
+            
+            finalTotal.textContent = `Total: ₹${cartTotal.toLocaleString()}`;
+            checkoutModal.style.display = 'block';
+        }
+
+        
+        function closeCheckout() {
+            document.getElementById('checkoutModal').style.display = 'none';
+        }
+
+        
+        async function processOrder() {
+            const name = document.getElementById('customerName').value;
+            const email = document.getElementById('customerEmail').value;
+            const phone = document.getElementById('customerPhone').value;
+            const address = document.getElementById('customerAddress').value;
+            const paymentMethod = document.getElementById('paymentMethod').value;
+
+            if (!name || !email || !phone || !paymentMethod) {
+                alert('Please fill in all required fields!');
+                return;
+            }
+
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = 'Processing...<span class="loading"></span>';
+            button.disabled = true;
+
+            try {
+                const orderData = {
+                    customerName: name,
+                    customerEmail: email,
+                    customerPhone: phone,
+                    customerAddress: address,
+                    paymentMethod: paymentMethod,
+                    items: cart,
+                    total: cartTotal
+                };
+
+                const response = await api.processOrder(orderData);
+
+                if (response.success) {
+                    closeCheckout();
+                    showSuccessMessage(`Order placed successfully! Order ID: ${response.order.id}. You will receive a confirmation email shortly.`);
+                    
+                    
+                    cart = [];
+                    cartTotal = 0;
+                    updateCartDisplay();
+                    
+                    
+                    document.getElementById('customerName').value = '';
+                    document.getElementById('customerEmail').value = '';
+                    document.getElementById('customerPhone').value = '';
+                    document.getElementById('customerAddress').value = '';
+                    document.getElementById('paymentMethod').value = '';
+                }
+            } catch (error) {
+                showSuccessMessage('Order failed: ' + error.message, 'error');
+                console.error('Order processing failed:', error);
+            } finally {
+                button.innerHTML = originalText;
+                button.disabled = false;
+            }
+        }
+
+        
+        function showSuccessMessage(message, type = 'success') {
+            const existingMessage = document.querySelector('.success-message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+
+            const successDiv = document.createElement('div');
+            successDiv.className = 'success-message';
+            if (type === 'error') {
+                successDiv.style.background = 'linear-gradient(45deg, #dc3545, #c82333)';
+            }
+            successDiv.textContent = message;
+            
+            document.body.appendChild(successDiv);
+            
+            setTimeout(() => {
+                successDiv.remove();
+            }, 5000);
+        }
+
+        
+        function updateBackendStatus() {
+            const indicator = document.getElementById('statusIndicator');
+            
+            const isOnline = Math.random() > 0.1; 
+            
+            if (isOnline) {
+                indicator.textContent = '🟢 Backend Online';
+                indicator.classList.remove('offline');
+            } else {
+                indicator.textContent = '🔴 Backend Offline';
+                indicator.classList.add('offline');
+            }
+        }
+
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            updateBackendStatus();
+            setInterval(updateBackendStatus, 30000); 
+            
+            
+            showSection('shop');
+        });
+
+        
+        window.addEventListener('click', (event) => {
+            const cartModal = document.getElementById('cartModal');
+            const checkoutModal = document.getElementById('checkoutModal');
+            
+            if (event.target === cartModal) {
+                closeCart();
+            }
+            if (event.target === checkoutModal) {
+                closeCheckout();
+            }
+        });
+    </script>
